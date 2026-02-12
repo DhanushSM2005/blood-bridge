@@ -1,21 +1,26 @@
+"""
+Django settings for Blood_Bridge project.
+"""
 import os
-import pymysql
-import dj_database_url
 from pathlib import Path
 
-# 1. DATABASE COMPATIBILITY
-# Ensures pymysql works with Django 6.x
+import pymysql
+# Manually set version info to bypass Django's version check
 pymysql.version_info = (2, 2, 1, 'final', 0)
 pymysql.install_as_MySQLdb()
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 2. SECURITY
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-change-this')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['*']
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-7*_n2z!%$86%2mm2$xyq8o_gn1&t943i)0jhpyr4z4up&gs)!g'
 
-# 3. APPLICATION DEFINITION
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = ['*']  # Railway handles this
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,7 +34,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,45 +60,66 @@ TEMPLATES = [
     },
 ]
 
-# 4. DATABASE CONFIGURATION
-# Prioritize Railway's individual variables if DATABASE_URL is missing
-if os.environ.get('MYSQLHOST'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('MYSQLDATABASE'),
-            'USER': os.environ.get('MYSQLUSER'),
-            'PASSWORD': os.environ.get('MYSQLPASSWORD'),
-            'HOST': os.environ.get('MYSQLHOST'),
-            'PORT': os.environ.get('MYSQLPORT'),
-            'OPTIONS': {
-                'charset': 'utf8mb4',
-            },
-        }
-    }
-else:
-    # Fallback to DATABASE_URL or Local Development
-    DATABASES = {
-        'default': dj_database_url.config(
-            default='mysql://bloodbridge_user:BloodBridge@2026@localhost:3306/blood_bridge_db',
-            conn_max_age=600,
-        )
-    }
+WSGI_APPLICATION = 'Blood_Bridge.wsgi.application'
 
-# 5. STATIC FILES
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
+# Custom User Model
+AUTH_USER_MODEL = 'core.User'
+
+
+# Database Configuration
+# First define the default database, then override if DATABASE_URL exists
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blood_bridge_db',
+        'USER': 'bloodbridge_user',
+        'PASSWORD': 'BloodBridge@2026',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+        },
+    }
 }
 
+# Override with Railway database if DATABASE_URL is set
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.parse(
+        os.environ['DATABASE_URL'],
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+
+
+# Password validation
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+
+# Internationalization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Asia/Kolkata'  # Indian timezone
+USE_I18N = True
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Login URLs
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
