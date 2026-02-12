@@ -4,6 +4,7 @@ import dj_database_url
 from pathlib import Path
 
 # 1. DATABASE COMPATIBILITY
+# Ensures pymysql works with Django 6.x
 pymysql.version_info = (2, 2, 1, 'final', 0)
 pymysql.install_as_MySQLdb()
 
@@ -56,14 +57,29 @@ TEMPLATES = [
 ]
 
 # 4. DATABASE CONFIGURATION
-# This is the "Magic" line for Railway. 
-# It looks for 'MYSQL_URL' or 'DATABASE_URL' variables provided by Railway.
-DATABASES = {
-    'default': dj_database_url.config(
-        default='mysql://bloodbridge_user:BloodBridge@2026@localhost:3306/blood_bridge_db',
-        conn_max_age=600,
-    )
-}
+# Prioritize Railway's individual variables if DATABASE_URL is missing
+if os.environ.get('MYSQLHOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('MYSQLDATABASE'),
+            'USER': os.environ.get('MYSQLUSER'),
+            'PASSWORD': os.environ.get('MYSQLPASSWORD'),
+            'HOST': os.environ.get('MYSQLHOST'),
+            'PORT': os.environ.get('MYSQLPORT'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            },
+        }
+    }
+else:
+    # Fallback to DATABASE_URL or Local Development
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='mysql://bloodbridge_user:BloodBridge@2026@localhost:3306/blood_bridge_db',
+            conn_max_age=600,
+        )
+    }
 
 # 5. STATIC FILES
 STATIC_URL = 'static/'
