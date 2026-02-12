@@ -1,0 +1,1 @@
+web: gunicorn Blood_Bridge.wsgi --log-file -

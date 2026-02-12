@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - Blood Bridge</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">🩸</span>
+                <span class="logo-text">Blood Bridge</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="{% url 'donor_dashboard' %}" class="active">
+                    <i>🏠</i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'donor_profile' %}">
+                    <i>👤</i>
+                    <span>My Profile</span>
+                </a>
+                <a href="{% url 'blood_requests' %}">
+                    <i>💉</i>
+                    <span>Blood Requests</span>
+                </a>
+                <a href="{% url 'logout' %}">
+                    <i>🚪</i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-bar-icons">
+                    <button class="icon-btn">🔔</button>
+                    <button class="icon-btn">👤</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                
+                <!-- Welcome Section -->
+                <section class="welcome-section">
+                    <div class="welcome-header">
+                        <div class="welcome-info">
+                            <h2>Welcome, {{ user.full_name|default:"John Doe" }}</h2>
+                            <div class="user-details">
+                                <div class="blood-group-badge">{{ user.blood_group|default:"O+" }}</div>
+                                <div class="user-meta">
+                                    <span>🩸 Blood Group • {{ user.city|default:"Chennai" }}</span>
+                                </div>
+                                <div class="availability-toggle">
+                                    <span>Availability</span>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pending Blood Requests -->
+                <section class="requests-section">
+                    <h3>Pending Blood Requests</h3>
+                    
+                    <div class="request-card">
+                        <div class="request-info">
+                            <div class="blood-type-icon a-plus">A+</div>
+                            <div class="request-details">
+                                <h4>Needed at Apollo Hospital</h4>
+                                <p>3 Units</p>
+                            </div>
+                        </div>
+                        <button class="btn-accept" data-request-id="1">Accept Request</button>
+                    </div>
+
+                    <div class="request-card">
+                        <div class="request-info">
+                            <div class="blood-type-icon b-plus">B+</div>
+                            <div class="request-details">
+                                <h4>Needed at City Hospital</h4>
+                                <p>2 Units</p>
+                            </div>
+                        </div>
+                        <button class="btn-accept" data-request-id="2">Accept Request</button>
+                    </div>
+
+                    {% for request in blood_requests %}
+                    <div class="request-card">
+                        <div class="request-info">
+                            <div class="blood-type-icon {{ request.blood_group|lower|cut:'+' }}-plus">{{ request.blood_group }}</div>
+                            <div class="request-details">
+                                <h4>Needed at {{ request.hospital_name }}</h4>
+                                <p>{{ request.units_required }} Units</p>
+                            </div>
+                        </div>
+                        <button class="btn-accept" data-request-id="{{ request.id }}">Accept Request</button>
+                    </div>
+                    {% endfor %}
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - Blood Bridge</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <h1 class="page-title">Donor Dashboard</h1>
+    
+    <div class="container">
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card red">
+                <h3>120</h3>
+                <p>Total Donors</p>
+            </div>
+            
+            <div class="stat-card orange">
+                <h3>15</h3>
+                <p>Active Requests</p>
+            </div>
+            
+            <div class="stat-card teal">
+                <h3>85</h3>
+                <p>Blood Stock</p>
+            </div>
+        </div>
+
+        <!-- Placeholder for list items (would be populated with data) -->
+        <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="height: 60px; background-color: #f5f5f5; border-radius: 8px; margin-bottom: 15px;"></div>
+            <div style="height: 60px; background-color: #f5f5f5; border-radius: 8px; margin-bottom: 15px;"></div>
+            <div style="height: 60px; background-color: #f5f5f5; border-radius: 8px; margin-bottom: 15px;"></div>
+            <div style="height: 60px; background-color: #f5f5f5; border-radius: 8px;"></div>
+        </div>
+
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

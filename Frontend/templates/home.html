@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bridge - Save Life. Donate Blood.</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-section">
+            <span class="logo-icon"><img src="static/images/blood_droped.jpg" 
+     style="width: 40px; height: 40px; object-fit: contain; clip-path: circle(45%); filter: drop-shadow(0 0 15px rgba(0,0,0,0.5));"></span>
+            <a href="{% url 'home' %}" class="logo-text">Blood Bridge</a>
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'login' %}" class="btn-primary">Login</a>
+            <a href="{% url 'register' %}"class="btn-primary" >Register</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Save Life. <span class="highlight">Donate Blood.</span></h1>
+                <p>Connecting donors and patients in emergencies.</p>
+                <a href="{% url 'register' %}" class="btn-primary">Become a Donor</a>
+            </div>
+            <div class="hero-illustration">
+               <img src="static/images/Gemini_Generated_Image_ollcwrollcwrollc.png" 
+     alt="Blood Drop" 
+     style="width:500px; 
+            mix-blend-mode: multiply; 
+            filter: contrast(1.2); 
+            display: block;">
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <img src="static/images/Screenshot 2026-02-10 134147.png" 
+     alt="Security Lock" 
+     style="width: 70px; height: 70px; border-radius: 25px; object-fit: cover; margin: 10px;">
+                <h3>Secure Authentication</h3>
+                <p>Elite Hospitals Aequetts<br>Donor Ritter</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                 <img src="static/images/Screenshot 2026-02-10 134214.png" 
+     alt="Sync Icon" 
+     style="width: 70px; height: 70px; border-radius: 25px; object-fit: cover; margin: 10px;">
+                <h3>Quick Donor Matching</h3>
+                <p>Dlaplacsolta a Igantion<br>Etinor Maters</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+               <img src="static/images/Screenshot 2026-02-10 125155.png" 
+     alt="Medical Cross" 
+     style="width: 70px; height: 70px; border-radius: 25px; object-fit: cover; margin: 10px;">
+                <h3>Hospital Support</h3>
+                <p>Entergericy Anthent<br>Emits dates</p>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Blood Bridge | <a href="#">Contact Us</a></p>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Requests - Blood Bridge</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">🩸</span>
+                <span class="logo-text">Blood Bridge</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="{% url 'donor_dashboard' %}">
+                    <i>🏠</i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'donor_profile' %}">
+                    <i>👤</i>
+                    <span>My Profile</span>
+                </a>
+                <a href="{% url 'blood_requests' %}" class="active">
+                    <i>💉</i>
+                    <span>Blood Requests</span>
+                </a>
+                <a href="{% url 'logout' %}">
+                    <i>🚪</i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-bar-icons">
+                    <button class="icon-btn">🔔</button>
+                    <button class="icon-btn">👤</button>
+                </div>
+            </div>
+
+            <!-- Blood Requests Content -->
+            <div class="dashboard-content">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>All Blood Requests</h2>
+                    <a href="{% url 'request_blood' %}" class="btn-primary">Create New Request</a>
+                </div>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                
+                <section class="requests-section">
+                    {% if blood_requests %}
+                        {% for request in blood_requests %}
+                        <div class="request-card">
+                            <div class="request-info">
+                                <div class="blood-type-icon {% if request.blood_group == 'A+' %}a-plus{% elif request.blood_group == 'B+' %}b-plus{% elif request.blood_group == 'O+' %}o-plus{% else %}ab-plus{% endif %}">
+                                    {{ request.blood_group }}
+                                </div>
+                                <div class="request-details">
+                                    <h4>{{ request.hospital_name }}</h4>
+                                    <p>{{ request.units_required }} Units • {{ request.location }}</p>
+                                    <p style="font-size: 12px; color: #999;">
+                                        Emergency: {{ request.emergency_level }} | 
+                                        Status: <strong>{{ request.status }}</strong> | 
+                                        {{ request.created_at|date:"M d, Y" }}
+                                    </p>
+                                </div>
+                            </div>
+                            {% if request.status == 'Pending' and request.requested_by != user %}
+                                <a href="{% url 'accept_request' request.request_id %}" class="btn-accept">Accept Request</a>
+                            {% elif request.assigned_to == user %}
+                                <button class="btn-accept" style="background-color: #4caf50;">Accepted by You</button>
+                            {% elif request.requested_by == user %}
+                                <button class="btn-accept" style="background-color: #666;">Your Request</button>
+                            {% else %}
+                                <button class="btn-accept" style="background-color: #999; cursor: not-allowed;" disabled>{{ request.status }}</button>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            <p style="font-size: 18px;">No blood requests available</p>
+                            <p>Be the first to create a request!</p>
+                            <a href="{% url 'request_blood' %}" class="btn-primary" style="margin-top: 15px;">Create Request</a>
+                        </div>
+                    {% endif %}
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

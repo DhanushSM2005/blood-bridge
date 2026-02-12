@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Blood Bridge</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <h1 class="page-title">Admin Dashboard</h1>
+    
+    <div class="dashboard-container">
+        
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <div class="admin-title">
+                <span class="logo-icon">🩸</span>
+                <span>Admin Dashboard</span>
+            </div>
+            <div class="admin-actions">
+                <button class="icon-btn" style="width: 35px; height: 35px; font-size: 14px;">📊</button>
+                <button class="icon-btn" style="width: 35px; height: 35px; font-size: 14px;">⚙️</button>
+                <button class="icon-btn" style="width: 35px; height: 35px; font-size: 14px;">📁</button>
+                <button class="icon-btn" style="width: 35px; height: 35px; font-size: 14px;">👤</button>
+            </div>
+        </div>
+
+        <!-- Admin Table -->
+        <div class="admin-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>☰</th>
+                        <th>Blood Group</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>REQ001</td>
+                        <td></td>
+                        <td>
+                            <div class="blood-group-cell">
+                                <span style="color: #e74c3c;">●</span>
+                                <span>A+</span>
+                            </div>
+                        </td>
+                        <td><span class="status-badge pending">Pending</span></td>
+                        <td>Not Assigned</td>
+                    </tr>
+                    <tr>
+                        <td>REQ002</td>
+                        <td></td>
+                        <td>
+                            <div class="blood-group-cell">
+                                <span style="color: #e67e22;">🩸</span>
+                                <span>B-</span>
+                            </div>
+                        </td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                        <td>Rahul S.</td>
+                    </tr>
+                    <tr>
+                        <td>REQ003</td>
+                        <td></td>
+                        <td>
+                            <div class="blood-group-cell">
+                                <span style="color: #e74c3c;">🩸</span>
+                                <span>O+</span>
+                            </div>
+                        </td>
+                        <td><span class="status-badge in-progress">In Progress</span></td>
+                        <td>Rahul S.</td>
+                    </tr>
+                    <tr>
+                        <td>REQ004</td>
+                        <td></td>
+                        <td>
+                            <div class="blood-group-cell">
+                                <span style="color: #3498db;">🩸</span>
+                                <span>O+</span>
+                            </div>
+                        </td>
+                        <td><span class="status-badge needmint">Needmint</span></td>
+                        <td>Handm</td>
+                    </tr>
+
+                    {% for request in blood_requests %}
+                    <tr>
+                        <td>{{ request.request_id }}</td>
+                        <td></td>
+                        <td>
+                            <div class="blood-group-cell">
+                                <span style="color: #e74c3c;">🩸</span>
+                                <span>{{ request.blood_group }}</span>
+                            </div>
+                        </td>
+                        <td><span class="status-badge {{ request.status|lower }}">{{ request.status }}</span></td>
+                        <td>{{ request.assigned_to|default:"Not Assigned" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
