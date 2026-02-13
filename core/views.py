@@ -27,8 +27,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful!')
-            return redirect('donor_dashboard')  # FIXED: Changed from 'dashboard' to 'donor_dashboard'
-        else:
+            return redirect('donor_dashboard')  
             messages.error(request, 'Invalid email or password')
     
     return render(request, 'login.html')
@@ -43,13 +42,13 @@ def user_register(request):
         city = request.POST.get('city')
         password = request.POST.get('password')
         
-        # Check if user already exists
+
         if User.objects.filter(username=email).exists():
             messages.error(request, 'This email is already registered')
         elif User.objects.filter(email=email).exists():
             messages.error(request, 'This email is already registered')
         else:
-            # Create new user
+           
             try:
                 user = User.objects.create_user(
                     username=email,
@@ -70,7 +69,7 @@ def user_register(request):
 @login_required
 def donor_dashboard(request):
     """Donor dashboard view"""
-    # Get pending blood requests
+    
     blood_requests = BloodRequest.objects.filter(status='Pending')[:10]
     
     context = {
@@ -118,10 +117,10 @@ def request_blood(request):
         location = request.POST.get('location')
         emergency_level = request.POST.get('emergency_level')
         
-        # Generate unique request ID
+        
         request_id = 'REQ' + ''.join(random.choices(string.digits, k=6))
         
-        # Create blood request
+        
         BloodRequest.objects.create(
             request_id=request_id,
             blood_group=blood_group,
@@ -156,7 +155,7 @@ def accept_request(request, request_id):
 @login_required
 def admin_dashboard(request):
     """Admin dashboard view"""
-    # Check if user is staff/admin
+    
     if not request.user.is_staff:
         messages.error(request, 'Access denied. Admin privileges required.')
         return redirect('donor_dashboard')
