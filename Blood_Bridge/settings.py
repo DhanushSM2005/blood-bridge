@@ -58,10 +58,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Blood_Bridge.wsgi.application'
 
-# 4. FINAL DATABASE CONFIGURATION
-# We use the individual variables you provided (MYSQLHOST, MYSQLUSER, etc.)
-# This is more reliable than DATABASE_URL when the URL is empty or malformed.
+# CRITICAL FIX: Tell Django to use your custom User model to avoid the E304 Clash
+AUTH_USER_MODEL = 'core.User'
 
+# 4. FINAL DATABASE CONFIGURATION
 if os.environ.get('MYSQLHOST'):
     DATABASES = {
         'default': {
